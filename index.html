@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<link rel="manifest" href="manifest.json">
+<title>95 KG Journey</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--accent:#111827;--green:#15803d;--red:#dc2626;--amber:#b45309}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+.app{max-width:720px;margin:auto;padding:18px 16px 90px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-size:24px;font-weight:800}.sub{font-size:12px;color:var(--muted);margin-top:2px}.date{font-size:13px;color:var(--muted);text-align:right}
+.hero{background:#111827;color:white;border-radius:24px;padding:22px;box-shadow:0 10px 30px #11182718}.heroRow{display:flex;justify-content:space-between;gap:15px}.label{font-size:12px;opacity:.7;text-transform:uppercase;letter-spacing:.08em}.weight{font-size:40px;font-weight:800;margin-top:4px}.target{font-size:13px;opacity:.75}.bar{height:9px;background:#ffffff25;border-radius:10px;margin-top:18px;overflow:hidden}.bar>div{height:100%;background:white;border-radius:10px}.progressText{display:flex;justify-content:space-between;font-size:12px;margin-top:8px;opacity:.8}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}.statTitle{font-size:12px;color:var(--muted)}.stat{font-size:25px;font-weight:800;margin-top:5px}.small{font-size:12px;color:var(--muted);margin-top:3px}
+.section{margin-top:18px}.sectionHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}.section h2{font-size:17px;margin:0}.link{font-size:12px;color:var(--muted);cursor:pointer}
+.status{display:grid;gap:9px}.row{background:white;border:1px solid var(--line);border-radius:15px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between}.left{display:flex;align-items:center;gap:11px}.icon{width:32px;height:32px;border-radius:10px;background:#f3f4f6;display:grid;place-items:center}.rowTitle{font-weight:650;font-size:14px}.rowSub{font-size:11px;color:var(--muted);margin-top:2px}.pill{font-size:11px;font-weight:700;padding:6px 9px;border-radius:999px}.done{background:#dcfce7;color:#166534}.todo{background:#f3f4f6;color:#6b7280}
+.actions{display:flex;gap:8px;margin-top:10px}.btn{border:0;border-radius:12px;padding:11px 13px;font-weight:700;cursor:pointer;background:#111827;color:#fff}.btn.secondary{background:#f3f4f6;color:#111827}.btn.danger{background:#fee2e2;color:#991b1b}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:15px;color:var(--text)} label{font-size:12px;color:var(--muted);display:block;margin:10px 0 5px}
+.meal{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}.meal:last-child{border-bottom:0}.mealName{font-weight:650}.mealCal{font-size:12px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;justify-content:center;z-index:10}.sheet{width:min(720px,100%);background:white;border-radius:24px 24px 0 0;padding:20px;max-height:88vh;overflow:auto}.modal.open{display:flex}.sheetTop{display:flex;justify-content:space-between;align-items:center}.close{font-size:25px;cursor:pointer}.foodgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.food{border:1px solid var(--line);border-radius:13px;padding:12px;cursor:pointer}.food b{display:block;font-size:13px}.food span{font-size:11px;color:var(--muted)}
+.historyItem{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.historyItem:last-child{border-bottom:0}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.day{background:white;border:1px solid var(--line);border-radius:11px;padding:8px 3px;text-align:center;font-size:10px}.day .dot{width:9px;height:9px;border-radius:50%;background:#d1d5db;margin:5px auto}.day.good .dot{background:#22c55e}.day.bad .dot{background:#ef4444}.day.partial .dot{background:#f59e0b}
+.note{background:#f9fafb;border-radius:14px;padding:12px;font-size:12px;color:var(--muted);line-height:1.45}
+footer{position:fixed;bottom:0;left:0;right:0;background:#ffffffee;border-top:1px solid var(--line);padding:10px 16px;text-align:center;font-size:11px;color:var(--muted);backdrop-filter:blur(10px)}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}.foodgrid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div><div class="brand">95 KG Journey</div><div class="sub">116 kg → 95 kg • sustainable fat loss</div></div>
+    <div class="date" id="todayDate"></div>
+  </div>
+
+  <section class="hero">
+    <div class="heroRow">
+      <div><div class="label">Current weight</div><div class="weight" id="weightHero">116.0</div><div class="target">Target 95.0 kg</div></div>
+      <div style="text-align:right"><div class="label">Today</div><div class="weight" style="font-size:28px" id="scoreHero">0/6</div><div class="target" id="dayLabel">Not completed</div></div>
+    </div>
+    <div class="bar"><div id="progressBar"></div></div>
+    <div class="progressText"><span id="lostText">0 kg lost</span><span>21 kg goal</span></div>
+  </section>
+
+  <div class="grid">
+    <div class="card"><div class="statTitle">Calories</div><div class="stat" id="calStat">0</div><div class="small">target <span id="calTarget">2,000</span> kcal</div></div>
+    <div class="card"><div class="statTitle">Steps</div><div class="stat" id="stepsStat">0</div><div class="small">target 9,000</div></div>
+    <div class="card"><div class="statTitle">Exercise</div><div class="stat" id="exerciseStat">0</div><div class="small">minutes today</div></div>
+    <div class="card"><div class="statTitle">Streak</div><div class="stat" id="streakStat">0</div><div class="small">completed days</div></div>
+  </div>
+
+  <section class="section">
+    <div class="sectionHead"><h2>Today's completion</h2><span class="link" onclick="openSettings()">Settings</span></div>
+    <div class="status">
+      <div class="row"><div class="left"><div class="icon">⚖️</div><div><div class="rowTitle">Weight</div><div class="rowSub" id="weightStatus">Not entered</div></div></div><span class="pill todo" id="weightPill">Pending</span></div>
+      <div class="row"><div class="left"><div class="icon">🍽️</div><div><div class="rowTitle">Meals</div><div class="rowSub" id="mealStatus">No meals logged</div></div></div><span class="pill todo" id="mealPill">Pending</span></div>
+      <div class="row"><div class="left"><div class="icon">🚶</div><div><div class="rowTitle">Steps</div><div class="rowSub" id="stepsStatus">0 / 9,000</div></div></div><span class="pill todo" id="stepsPill">Pending</span></div>
+      <div class="row"><div class="left"><div class="icon">🏋️</div><div><div class="rowTitle">Exercise</div><div class="rowSub" id="exerciseStatus">0 min / 30 min</div></div></div><span class="pill todo" id="exercisePill">Pending</span></div>
+      <div class="row"><div class="left"><div class="icon">🥤</div><div><div class="rowTitle">No sugary drink</div><div class="rowSub">Keep Coke/soft drinks out today</div></div></div><span class="pill todo" id="sugarPill">Pending</span></div>
+      <div class="row"><div class="left"><div class="icon">🍴</div><div><div class="rowTitle">Controlled dinner</div><div class="rowSub">Dinner within your calorie target</div></div></div><span class="pill todo" id="dinnerPill">Pending</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead"><h2>Quick entry</h2></div>
+    <div class="grid">
+      <div class="card"><label>Weight (kg)</label><input id="weightInput" type="number" step="0.1" placeholder="e.g. 115.8"><div class="actions"><button class="btn" onclick="saveWeight()">Save</button></div></div>
+      <div class="card"><label>Steps</label><input id="stepsInput" type="number" placeholder="e.g. 8500"><div class="actions"><button class="btn" onclick="saveSteps()">Save</button></div></div>
+      <div class="card"><label>Exercise minutes</label><input id="exerciseInput" type="number" placeholder="e.g. 40"><div class="actions"><button class="btn" onclick="saveExercise()">Save</button></div></div>
+      <div class="card"><label>Daily habits</label><div class="actions"><button class="btn secondary" onclick="toggleHabit('sugar')">Sugary drink: <span id="sugarBtn">No</span></button><button class="btn secondary" onclick="toggleHabit('dinner')">Dinner: <span id="dinnerBtn">No</span></button></div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead"><h2>Calories & meals</h2><button class="btn" onclick="openMeals()">+ Add meal</button></div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between"><b id="mealTotal">0 kcal</b><span class="small" id="remaining">2,000 kcal remaining</span></div>
+      <div id="mealList"><div class="note" style="margin-top:10px">Add what you actually ate. Home-cooked calories are estimates; use portion size consistently.</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead"><h2>Last 7 days</h2><span class="link" onclick="renderHistory()">Refresh</span></div>
+    <div class="calendar" id="calendar"></div>
+  </section>
+
+  <section class="section">
+    <div class="sectionHead"><h2>History</h2></div>
+    <div class="card" id="history"></div>
+  </section>
+
+  <section class="section"><div class="note"><b>Health data:</b> This PWA cannot directly read Apple Health/HealthKit. Steps, exercise and calories can be entered here. Automatic Apple Health syncing requires a native iPhone app with HealthKit permission.</div></section>
+</div>
+
+<footer>95 KG Journey • Data stays on this device</footer>
+
+<div class="modal" id="mealModal"><div class="sheet">
+  <div class="sheetTop"><h2 style="margin:0">Add meal</h2><div class="close" onclick="closeMeals()">×</div></div>
+  <input id="foodSearch" placeholder="Search food..." oninput="renderFoods()">
+  <div class="foodgrid" id="foodGrid"></div>
+</div></div>
+
+<div class="modal" id="settingsModal"><div class="sheet">
+  <div class="sheetTop"><h2 style="margin:0">Settings</h2><div class="close" onclick="closeSettings()">×</div></div>
+  <label>Daily calorie target</label><input id="calTargetInput" type="number" value="2000">
+  <div class="actions"><button class="btn" onclick="saveSettings()">Save</button><button class="btn danger" onclick="resetAll()">Reset all data</button></div>
+  <div class="note" style="margin-top:14px">The calorie target is a tracking target, not medical advice. Adjust it with your clinician/dietitian if needed.</div>
+</div></div>
+
+<script>
+const foods=[
+["Aloo paratha","1 medium",260],["Roti","1 medium",100],["Rice","1 cup cooked",205],["Dal","1 cup",210],
+["Mixed sabji","1 cup",160],["Paneer","100 g",265],["Curd","150 g",95],["Egg","1",75],
+["Banana","1 medium",105],["Apple","1 medium",95],["Samosa","1",260],["Bread pakora","1",220],
+["Pizza","1 slice",285],["Garlic bread","1 serving",180],["Burger","1",450],["Fries","1 medium",340],
+["Coke","330 ml",139],["Tea with milk/sugar","1 cup",90],["Coffee with milk/sugar","1 cup",100],["Poha","1 cup",250],
+["Upma","1 cup",220],["Idli","2",140],["Dosa","1 plain",170],["Chole","1 cup",300],["Rajma","1 cup",230],
+["Chicken curry","1 cup",300],["Maggi","1 pack",350],["Biscuits","4",200],["Ice cream","1 scoop",140]
+];
+const KEY="kgj_v5";
+let db=JSON.parse(localStorage.getItem(KEY)||"{}");
+db.days=db.days||{}; db.settings=db.settings||{cal:2000}; db.currentWeight=db.currentWeight||116;
+const iso=()=>new Date().toISOString().slice(0,10);
+function day(){let d=db.days[iso()]; if(!d)d=db.days[iso()]={weight:null,steps:0,exercise:0,sugar:false,dinner:false,meals:[]}; return d}
+function save(){localStorage.setItem(KEY,JSON.stringify(db)); render()}
+function score(d){return [d.weight!=null,d.meals?.length>0,d.steps>=9000,d.exercise>=30,d.sugar,d.dinner].filter(Boolean).length}
+function completed(d){return score(d)>=5}
+function render(){
+ const d=day(), cal=d.meals.reduce((a,x)=>a+x.cal,0), s=score(d);
+ document.getElementById("todayDate").textContent=new Date().toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+ const w=d.weight??db.currentWeight; document.getElementById("weightHero").textContent=Number(w).toFixed(1);
+ document.getElementById("scoreHero").textContent=s+"/6"; document.getElementById("dayLabel").textContent=completed(d)?"Day completed":"Not completed";
+ let lost=Math.max(0,116-w), pct=Math.max(0,Math.min(100,lost/21*100)); document.getElementById("progressBar").style.width=pct+"%"; document.getElementById("lostText").textContent=lost.toFixed(1)+" kg lost";
+ document.getElementById("calStat").textContent=cal.toLocaleString(); document.getElementById("stepsStat").textContent=(d.steps||0).toLocaleString(); document.getElementById("exerciseStat").textContent=d.exercise||0;
+ document.getElementById("calTarget").textContent=db.settings.cal.toLocaleString();
+ document.getElementById("weightInput").value=d.weight??""; document.getElementById("stepsInput").value=d.steps||""; document.getElementById("exerciseInput").value=d.exercise||"";
+ setPill("weight",d.weight!=null,d.weight!=null?d.weight.toFixed(1)+" kg":"Not entered");
+ setPill("meal",d.meals.length>0,d.meals.length+" item"+(d.meals.length===1?"":"s")+" • "+cal+" kcal");
+ setPill("steps",d.steps>=9000,`${(d.steps||0).toLocaleString()} / 9,000`);
+ setPill("exercise",d.exercise>=30,`${d.exercise||0} min / 30 min`);
+ setPill("sugar",d.sugar,d.sugar?"Done":"Not done"); setPill("dinner",d.dinner,d.dinner?"Done":"Not done");
+ document.getElementById("sugarBtn").textContent=d.sugar?"Yes":"No"; document.getElementById("dinnerBtn").textContent=d.dinner?"Yes":"No";
+ document.getElementById("mealTotal").textContent=cal.toLocaleString()+" kcal"; document.getElementById("remaining").textContent=Math.max(0,db.settings.cal-cal).toLocaleString()+" kcal remaining";
+ document.getElementById("mealList").innerHTML=d.meals.length?d.meals.map((m,i)=>`<div class="meal"><div><div class="mealName">${m.name}</div><div class="mealCal">${m.portion}</div></div><div><b>${m.cal} kcal</b> <span class="link" onclick="removeMeal(${i})">×</span></div></div>`).join(""):'<div class="note" style="margin-top:10px">No meals logged yet.</div>';
+ document.getElementById("streakStat").textContent=streak();
+ renderHistory();
+}
+function setPill(id,ok,sub){let p=document.getElementById(id+"Pill"), st=document.getElementById(id+"Status");p.className="pill "+(ok?"done":"todo");p.textContent=ok?"Done":"Pending";st.textContent=sub}
+function saveWeight(){let v=parseFloat(document.getElementById("weightInput").value);if(!isNaN(v)&&v>0){day().weight=v;db.currentWeight=v;save()}}
+function saveSteps(){let v=parseInt(document.getElementById("stepsInput").value||0);day().steps=Math.max(0,v);save()}
+function saveExercise(){let v=parseInt(document.getElementById("exerciseInput").value||0);day().exercise=Math.max(0,v);save()}
+function toggleHabit(k){day()[k]=!day()[k];save()}
+function openMeals(){document.getElementById("mealModal").classList.add("open");renderFoods()}
+function closeMeals(){document.getElementById("mealModal").classList.remove("open")}
+function renderFoods(){let q=document.getElementById("foodSearch").value.toLowerCase();let arr=foods.filter(x=>x[0].toLowerCase().includes(q));document.getElementById("foodGrid").innerHTML=arr.map((x,i)=>`<div class="food" onclick="addMeal(${foods.indexOf(x)})"><b>${x[0]}</b><span>${x[1]} • ${x[2]} kcal</span></div>`).join("")}
+function addMeal(i){let f=foods[i];day().meals.push({name:f[0],portion:f[1],cal:f[2]});save();closeMeals()}
+function removeMeal(i){day().meals.splice(i,1);save()}
+function openSettings(){document.getElementById("calTargetInput").value=db.settings.cal;document.getElementById("settingsModal").classList.add("open")}
+function closeSettings(){document.getElementById("settingsModal").classList.remove("open")}
+function saveSettings(){let v=parseInt(document.getElementById("calTargetInput").value);if(v>=500){db.settings.cal=v;save();closeSettings()}}
+function resetAll(){if(confirm("Delete all app data on this device?")){localStorage.removeItem(KEY);location.reload()}}
+function dateObj(s){return new Date(s+"T12:00:00")}
+function streak(){let n=0;let d=new Date();for(let i=0;i<366;i++){let k=d.toISOString().slice(0,10),x=db.days[k];if(x&&completed(x))n++;else if(i>0)break;d.setDate(d.getDate()-1)}return n}
+function renderHistory(){
+ let el=document.getElementById("history"), entries=Object.keys(db.days).sort().reverse().slice(0,30);
+ el.innerHTML=entries.length?entries.map(k=>{let d=db.days[k], c=d.meals.reduce((a,x)=>a+x.cal,0), sc=score(d);return `<div class="historyItem"><div><b>${dateObj(k).toLocaleDateString("en-IN",{day:"2-digit",month:"short"})}</b><div class="small">${d.weight?d.weight.toFixed(1)+" kg":"—"} • ${c.toLocaleString()} kcal • ${(d.steps||0).toLocaleString()} steps</div></div><div style="text-align:right"><b>${sc}/6</b><div class="small" style="color:${completed(d)?"#15803d":"#dc2626"}">${completed(d)?"Completed":"Not completed"}</div></div></div>`}).join(""):'<div class="note">Your completed and missed days will appear here.</div>';
+ let now=new Date(), days=[];for(let i=6;i>=0;i--){let d=new Date(now);d.setDate(now.getDate()-i);let k=d.toISOString().slice(0,10),x=db.days[k];days.push(`<div class="day ${x?(completed(x)?"good":"partial"):""}"><b>${d.toLocaleDateString("en-IN",{weekday:"short"}).slice(0,3)}</b><div class="dot"></div><span>${d.getDate()}</span></div>`)}
+ document.getElementById("calendar").innerHTML=days.join("");
+}
+render();
+</script>
+</body>
+</html>
